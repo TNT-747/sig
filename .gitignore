@@ -40,9 +40,9 @@ results/
 *.jpg
 *.jpeg
 
-# Data (keep CSV files in repo)
-# Uncomment if you want to exclude CSV files
-# *.csv
+# Data - Exclude large CSV dataset files
+# Users should download from: https://www.kaggle.com/datamunge/sign-language-mnist
+*.csv
 
 # IDE
 .vscode/
