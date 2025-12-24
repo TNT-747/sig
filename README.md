@@ -18,9 +18,14 @@ This project implements a complete pipeline for hand gesture recognition:
 - Image size: 28x28 pixels (grayscale)
 - Classes: 24 gestures (A-Y, excluding J and Z)
 
-The dataset files are:
-- `sign_mnist_train.csv` - Training data
-- `sign_mnist_test.csv` - Test data
+**Download the dataset:**
+
+The dataset files are not included in this repository due to their size. Download them from:
+- [Kaggle: Sign Language MNIST](https://www.kaggle.com/datamunge/sign-language-mnist)
+
+Place the following files in the project root directory:
+- `sign_mnist_train.csv` - Training data (80 MB)
+- `sign_mnist_test.csv` - Test data (21 MB)
 
 ## 🏗️ Project Structure
 
