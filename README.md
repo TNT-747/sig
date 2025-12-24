@@ -247,3 +247,4 @@ This project is for educational purposes.
 **Author**: Built for learning hand gesture recognition with Computer Vision and Deep Learning
 
 **Last Updated**: December 2025
+# sig
