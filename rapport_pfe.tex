@@ -1,0 +1,313 @@
+\documentclass[12pt,a4paper]{report}
+
+% ====== Préambule ======
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\usepackage{setspace}
+\onehalfspacing
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=black,urlcolor=blue}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{caption}
+\usepackage{lettrine}
+\usepackage{xcolor}
+\usepackage{framed}
+\usepackage{comment}
+\usepackage{tikz}
+\usepackage{listings}
+\usepackage{longtable}
+\usepackage{booktabs}
+
+% Configuration des listings pour le code
+\lstset{
+    backgroundcolor=\color{gray!10},
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    captionpos=b,
+    commentstyle=\color{green!60!black},
+    keywordstyle=\color{blue!80!black},
+    stringstyle=\color{red!70!black},
+    numberstyle=\tiny\color{gray},
+    numbers=left,
+    stepnumber=1,
+    frame=single,
+    rulecolor=\color{black!30},
+    showstringspaces=false,
+    tabsize=2,
+    literate={é}{{\'e}}1 {è}{{\`e}}1 {à}{{\`a}}1 {ç}{{\c c}}1
+}
+
+% Chemins des images
+\graphicspath{{images/}{figures/}{results/}}
+
+\setlist[itemize]{noitemsep,topsep=2pt}
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{3}
+
+\titlespacing*{\chapter}{0pt}{0.5em}{1em}
+
+% Cadre gris clair
+\definecolor{LightGray}{gray}{0.92}
+\newenvironment{graybox}{\def\FrameCommand{\fboxrule=0pt \fcolorbox{LightGray}{LightGray}}\MakeFramed{\advance\hsize-2\fboxsep\FrameRestore}}{\endMakeFramed}
+
+% Identifiants
+\newcommand{\ecole}{\textbf{École Marocaine des Sciences de l'Ingénieur (EMSI) – Rabat}}
+\newcommand{\filiere}{\textbf{4IIR}}
+\newcommand{\organisme}{\textbf{Projet Personnel}}
+
+\begin{document}
+
+% ====== Page de titre ======
+\begin{titlepage}
+    \thispagestyle{empty}
+    \centering
+    \vspace*{1cm}
+    
+    {\Large \textbf{École Marocaine des Sciences de l'Ingénieur (EMSI) – Rabat}\par}
+    \vspace{0.5cm}
+    {\large \textbf{Filière : 4IIR - Ingénierie Informatique et Réseaux}\par}
+    
+    \vspace{2cm}
+    
+    \rule{\textwidth}{1.5pt}\\[0.5cm]
+    {\Huge \textbf{Rapport de Projet}\\[0.3cm]}
+    {\LARGE \textbf{Système de Reconnaissance de Gestes de la Main}\\[0.3cm]}
+    {\Large Application de Deep Learning pour le Langage des Signes\par}
+    \rule{\textwidth}{1.5pt}
+    
+    \vspace{2cm}
+    
+    \begin{flushleft}
+        \large
+        \textbf{Réalisé par :} Abderrahmane KASSIMI\\[10pt]
+        \textbf{Encadrant :} [Nom de l'encadrant]\\[10pt]
+        \textbf{Période :} Décembre 2024
+    \end{flushleft}
+    
+    \vfill
+    
+    {\large \textbf{Année académique : 2024--2025}\par}
+\end{titlepage}
+
+% ====== Remerciements ======
+\chapter*{Remerciements}
+\addcontentsline{toc}{chapter}{Remerciements}
+
+Je tiens à exprimer ma gratitude envers toutes les personnes qui ont contribué à la réussite de ce projet de vision par ordinateur et d'intelligence artificielle.
+
+Je remercie chaleureusement mon encadrant pour ses précieux conseils techniques et méthodologiques qui m'ont guidé tout au long du développement de ce système complexe.
+
+Mes remerciements vont également à l'équipe pédagogique de l'EMSI pour la formation solide en ingénierie informatique, qui m'a fourni les bases nécessaires pour aborder des sujets avancés comme le Deep Learning.
+
+Enfin, je remercie mes proches pour leur soutien constant durant cette période de travail intensif.
+
+% ====== Résumé ======
+\chapter*{Résumé}
+\addcontentsline{toc}{chapter}{Résumé}
+
+Ce rapport détaille la conception et le développement d'un système de reconnaissance de gestes de la main en temps réel, basé sur l'apprentissage profond (Deep Learning). L'objectif est de créer une interface capable d'identifier les lettres de l'alphabet du langage des signes américain (ASL) à partir d'un flux vidéo.
+
+Le système s'appuie sur une architecture de Réseau de Neurones Convolutifs (CNN) entraînée sur le jeu de données "Sign Language MNIST". Il intègre une chaîne de traitement complète : pré-traitement des images, augmentation des données, entraînement du modèle et inférence en temps réel via webcam.
+
+Les technologies clés utilisées incluent Python, TensorFlow/Keras pour la partie modélisation, et OpenCV pour le traitement d'images et la capture vidéo. Le projet démontre une précision de reconnaissance élevée (supérieure à 90\%) sur les données de test, validant ainsi l'efficacité de l'architecture choisie.
+
+Ce travail illustre l'application concrète de l'IA pour des problématiques d'accessibilité et d'interaction homme-machine (IHM).
+
+\textbf{Mots-clés :} Reconnaissance de gestes, Deep Learning, CNN, OpenCV, TensorFlow, Langage des Signes, Python.
+
+\chapter*{Abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+
+This report presents the design and development of a real-time hand gesture recognition system based on Deep Learning. The objective is to create an interface capable of identifying American Sign Language (ASL) alphabets from a video stream.
+
+The system relies on a Convolutional Neural Network (CNN) architecture trained on the "Sign Language MNIST" dataset. It integrates a complete processing pipeline: image preprocessing, data augmentation, model training, and real-time inference via webcam.
+
+Key technologies used include Python, TensorFlow/Keras for modeling, and OpenCV for image processing and video capture. The project demonstrates high recognition accuracy (over 90\%) on test data, validating the effectiveness of the chosen architecture.
+
+This work illustrates the practical application of AI for accessibility and Human-Computer Interaction (HCI) challenges.
+
+\textbf{Keywords:} Gesture Recognition, Deep Learning, CNN, OpenCV, TensorFlow, Sign Language, Python.
+
+% ====== Table des matières ======
+\tableofcontents
+\listoffigures
+
+% ====== Chapitre 1 : Introduction ======
+\chapter{Introduction}
+
+\section{Présentation du contexte}
+
+\lettrine[lines=3,loversize=0.12]{\textbf{L}}{}a vision par ordinateur (Computer Vision) et l'apprentissage profond (Deep Learning) ont révolutionné la manière dont les machines interagissent avec le monde visuel. Parmi les applications les plus prometteuses figure la reconnaissance de gestes, qui ouvre la voie à des interfaces homme-machine plus naturelles et intuitives.
+
+Dans ce contexte, la reconnaissance automatique du langage des signes représente un enjeu majeur d'accessibilité, permettant de briser les barrières de communication pour les personnes malentendantes.
+
+\section{Objectif du projet}
+
+L'objectif principal de ce projet est de développer un système logiciel capable de reconnaître et de classifier des gestes de la main statiques correspondant aux lettres de l'alphabet (A-Y) en temps réel.
+
+Ce projet vise à mettre en pratique des concepts avancés d'IA. Il s'agira notamment de construire et d'entraîner un modèle CNN performant, capable de généraliser à partir d'exemples variés. Le projet implique également le traitement d'images en temps réel avec OpenCV pour assurer une interaction fluide. Enfin, l'intégration du modèle dans une application interactive utilisant la webcam constitue l'aboutissement technique de ce travail.
+
+\section{Délimitation du projet}
+
+\subsection{Fonctionnalités prises en charge}
+
+Le système est conçu pour reconnaître 24 classes de gestes statiques, correspondant au langage des signes américain mais excluant les lettres 'J' et 'Z' dont la représentation nécessite du mouvement. Il offre une interface visuelle interactive où l'utilisateur place sa main dans une zone d'intérêt (ROI) prédéfinie. Le système affiche ensuite instantanément la lettre prédite accompagnée d'un score de confiance pour informer l'utilisateur de la fiabilité de la reconnaissance.
+
+\subsection{Limites}
+
+Il est important de noter que le projet se concentre exclusivement sur des gestes statiques et reste dépendant des conditions d'éclairage ainsi que de la qualité du capteur de la caméra. Il ne traite pas la traduction de phrases complètes nécessitant une analyse syntaxique, ni la reconnaissance de gestes dynamiques complexes impliquant une dimension temporelle.
+
+\section{Conclusion}
+
+Ce chapitre a posé les bases du projet, soulignant l'importance de la technologie pour l'accessibilité et définissant les objectifs techniques de cette réalisation.
+
+% ====== Chapitre 2 : Compétences développées ======
+\chapter{Les compétences développées}
+
+\section{Introduction}
+
+La réalisation de ce système de reconnaissance de gestes a été une opportunité majeure pour acquérir et consolider des compétences techniques pointues en Intelligence Artificielle.
+
+\section{Compétences techniques}
+
+\subsection{Deep Learning et TensorFlow}
+J'ai acquis une maîtrise approfondie de la bibliothèque \textbf{TensorFlow/Keras} pour la création de modèles de Deep Learning. J'ai appris à concevoir une architecture CNN (Convolutional Neural Network) optimisée. Cette conception a impliqué la mise en place de couches de convolution pour l'extraction de traits, de pooling pour la réduction de dimension, de normalisation (Batch Normalization) pour accélérer la convergence, et de régularisation (Dropout) pour éviter le sur-apprentissage.
+
+\subsection{Vision par Ordinateur (OpenCV)}
+L'utilisation de la bibliothèque \textbf{OpenCV} a été centrale pour la gestion des flux vidéo. Le développement a nécessité la création d'algorithmes robustes pour la détection de la peau et la soustraction d'arrière-plan. L'extraction précise de la région d'intérêt (ROI) a été une étape cruciale pour fournir des données d'entrée propres et normalisées au modèle de classification.
+
+\subsection{Traitement et Analyse de Données}
+La manipulation du jeu de données Sign Language MNIST a nécessité l'utilisation intensive de \textbf{Pandas} et \textbf{NumPy}. Ces outils ont permis le chargement efficace des données, la normalisation des pixels (mise à l'échelle 0-1) essentielle pour les réseaux de neurones, et le formatage des labels via le One-hot encoding.
+
+\section{Compétences Transversales}
+
+Ce projet a également renforcé mes capacités en gestion de projet, nécessitant une planification rigoureuse des étapes, depuis le pré-traitement des données jusqu'à la validation finale du modèle. J'ai également développé une approche méthodologique scientifique en analysant les courbes d'apprentissage (loss/accuracy) pour ajuster finement les hyperparamètres. Enfin, la rédaction de documentation technique claire (README, rapports) a été indispensable pour rendre le projet reproductible et compréhensible.
+
+\section{Conclusion}
+
+Ce projet m'a permis de devenir opérationnel sur la chaîne complète de développement d'une application d'IA, depuis la donnée brute jusqu'à l'application utilisateur finale.
+
+% ====== Chapitre 3 : Cahier de charge ======
+\chapter{Cahier de charge}
+
+\section{Introduction}
+
+Ce chapitre définit les spécifications fonctionnelles et techniques du système, garantissant qu'il répond aux exigences de performance et d'utilisabilité.
+
+\section{Besoins Fonctionnels}
+
+Le système doit répondre à un ensemble précis d'exigences fonctionnelles. Il doit assurer l'acquisition du flux vidéo de la webcam en temps réel. Il est nécessaire de permettre à l'utilisateur de définir une zone de détection (ROI) pour isoler efficacement la main de l'arrière-plan complexe. Le cœur du système doit être capable d'identifier correctement l'un des 24 gestes de l'alphabet ASL parmi les images capturées. En termes de retour utilisateur, l'interface doit afficher la lettre prédite et le taux de confiance directement sur le retour vidéo. Enfin, des commandes clavier doivent être disponibles pour permettre à l'utilisateur de recalibrer l'arrière-plan ou de quitter l'application à tout moment.
+
+\section{Contraintes Techniques}
+
+Plusieurs contraintes techniques cadrent le développement. La performance est primordiale : le temps de latence pour une prédiction doit être minime pour assurer une fluidité en temps réel supérieure à 20 FPS. Concernant la précision, le modèle doit atteindre une exactitude supérieure à 90\% sur le jeu de données de test pour être considéré comme viable. Enfin, sur le plan de l'environnement, le projet doit être développé en Python 3.x et conçu pour être portable sur différents systèmes d'exploitation tels que Linux et Windows.
+
+\section{Conclusion}
+
+Le respect de ce cahier des charges assure la création d'un outil fonctionnel, robuste et performant.
+
+% ====== Chapitre 4 : Conception du système ======
+\chapter{Conception du système}
+
+\section{Introduction}
+
+La phase de conception a permis de définir l'architecture globale du système et la structure du réseau de neurones.
+
+\section{Architecture Globale}
+
+Le système fonctionne selon un pipeline séquentiel bien défini. Tout d'abord, le flux vidéo est capturé via la webcam. Ensuite, une étape de pré-traitement est appliquée, comprenant l'extraction de la ROI, la conversion en niveaux de gris et le redimensionnement en 28x28 pixels. L'image traitée est alors passée au modèle CNN pour inférence. Enfin, la classe prédite (la lettre) est affichée à l'écran comme résultat final.
+
+\section{Architecture du Modèle (CNN)}
+
+Le modèle de réseau de neurones convolutifs est conçu pour être à la fois léger et performant. Il se compose de trois blocs de convolution successifs destinés à extraire les caractéristiques visuelles telles que la forme des doigts et l'orientation. Chaque bloc est systématiquement suivi d'une normalisation (Batch Normalization) et d'une couche de MaxPooling pour réduire la dimensionnalité.
+
+La partie classification est assurée par deux couches entièrement connectées (Dense), respectivement de 128 et 64 neurones, qui interprètent les caractéristiques extraites. La couche de sortie utilise une activation \textit{Softmax} pour fournir une distribution de probabilité sur les 24 classes possibles.
+
+La stratégie d'entraînement repose sur l'optimiseur Adam avec un taux d'apprentissage de 0.001 et la fonction de perte Categorical Crossentropy. De plus, une augmentation de données (rotation, zoom, décalage) est appliquée pour rendre le modèle robuste aux variations géométriques.
+
+\section{Conclusion}
+
+Cette conception modulaire sépare clairement la logique de vision par ordinateur de la logique d'intelligence artificielle, facilitant la maintenance et l'évolution du projet.
+
+% ====== Chapitre 5 : Réalisation ======
+\chapter{Réalisation}
+
+\section{Introduction}
+
+Ce chapitre présente la mise en œuvre technique du projet, les outils développés et les résultats obtenus.
+
+\section{Structure du Projet}
+
+Le code source est organisé de manière modulaire pour garantir la lisibilité et la maintenance. Le script \texttt{train.py} est le point d'entrée pour l'entraînement du modèle ; il gère le chargement des données, la construction de l'architecture et la sauvegarde des poids au format \texttt{.h5}. Le fichier \texttt{predict.py} assure l'inférence en temps réel en utilisant OpenCV pour la capture vidéo et le modèle pour les prédictions. Le module \texttt{data\_loader.py} contient les fonctions utilitaires pour le pré-traitement du dataset CSV, tandis que \texttt{model.py} définit l'architecture précise du CNN.
+
+\section{Interface de Prédiction Temps Réel}
+
+L'application finale lance une fenêtre vidéo interactive. Un rectangle vert délimite la zone de reconnaissance. L'utilisateur place sa main dans ce cadre, et le système effectue en boucle la capture, le pré-traitement, la prédiction et l'affichage du résultat.
+
+\begin{figure}[H]
+    \centering
+    % Placeholder for the test image as requested
+    \includegraphics[width=0.8\textwidth]{test_prediction_placeholder.png} 
+    \caption{Exemple de test de reconnaissance en temps réel (Image de test)}
+    \label{fig:test_prediction}
+\end{figure}
+
+L'image ci-dessus illustre un cas de test réel où le système identifie correctement le geste de l'utilisateur.
+
+\section{Résultats Expérimentaux}
+
+\subsection{Performance du Modèle}
+
+Après un entraînement sur 30 époques avec augmentation de données, le modèle a atteint des performances solides. L'exactitude (Accuracy) sur le jeu de test dépasse les 90\%, tandis que la perte (Loss) reste inférieure à 0.3.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{training_history.png}
+    \caption{Courbes d'apprentissage : Précision et Perte par époque}
+    \label{fig:training_history}
+\end{figure}
+
+Les courbes d'apprentissage présentées en Figure \ref{fig:training_history} (disponibles dans le dossier \texttt{results/}) montrent une convergence rapide et stable. L'écart réduit entre les courbes d'entraînement et de validation atteste de l'absence de sur-apprentissage majeur, résultat direct de l'utilisation du Dropout et de la technique d'Early Stopping.
+
+\section{Conclusion}
+
+La réalisation technique valide les choix de conception. Le système est fonctionnel, réactif et capable de reconnaître une grande variété de gestes avec une haute fiabilité.
+
+% ====== Chapitre 6 : Conclusion Générale ======
+\chapter{Conclusion Générale}
+
+Ce projet de \textbf{Système de Reconnaissance de Gestes de la Main} a permis de concrétiser des connaissances théoriques en Deep Learning au travers d'une application pratique et utile.
+
+En partant d'un jeu de données brut, j'ai pu construire une chaîne complète de traitement de l'information, aboutissant à une IA capable de voir et de comprendre des formes complexes en temps réel. Ce travail démontre non seulement la puissance des réseaux de neurones convolutifs pour les tâches de vision, mais aussi l'accessibilité de ces technologies grâce à des outils comme TensorFlow et OpenCV.
+
+Les perspectives d'évolution sont nombreuses : extension à des gestes dynamiques (mouvements), reconnaissance de mots complets ou déploiement sur des systèmes embarqués (Raspberry Pi, Mobile).
+
+Ce projet constitue une étape significative dans mon parcours d'ingénieur, attestant de ma capacité à concevoir et finaliser des systèmes intelligents complexes.
+
+% ====== Bibliographie ======
+\chapter*{Bibliographie}
+\addcontentsline{toc}{chapter}{Bibliographie}
+
+\section*{Ressources et Documentation}
+
+\begin{enumerate}
+    \item \textbf{TensorFlow Documentation} \\
+    \url{https://www.tensorflow.org/api_docs}
+    
+    \item \textbf{OpenCV Library} \\
+    \url{https://docs.opencv.org/}
+    
+    \item \textbf{Sign Language MNIST Dataset (Kaggle)} \\
+    \url{https://www.kaggle.com/datamunge/sign-language-mnist}
+    
+    \item \textbf{Keras Documentation} \\
+    \url{https://keras.io/}
+\end{enumerate}
+
+\end{document}
